@@ -76,3 +76,28 @@ public class InvoiceValidationService {
         }
     }
 }
+
+/*
+import at.madeha.intelliinvoice.utilities.DateUtils;
+import at.madeha.intelliinvoice.utilities.ValidationUtils;
+
+public class InvoiceService {
+
+    public void validateInvoiceData(String storeName, BigDecimal totalAmount) {
+        // Using ValidationUtils
+        if (ValidationUtils.isEmpty(storeName)) {
+            throw new IllegalArgumentException("Store name cannot be empty");
+        }
+
+        if (!ValidationUtils.isPositive(totalAmount.doubleValue())) {
+            throw new IllegalArgumentException("Total amount must be positive");
+        }
+    }
+
+    public void printInvoiceDate(LocalDate date) {
+        // Using DateUtils
+        String formatted = DateUtils.formatDate(date);
+        System.out.println("Invoice date: " + formatted);
+    }
+}
+ */
