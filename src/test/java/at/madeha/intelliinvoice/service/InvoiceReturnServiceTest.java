@@ -1,6 +1,7 @@
 package at.madeha.intelliinvoice.service;
 
 import at.madeha.intelliinvoice.database.InvoiceEntity;
+import at.madeha.intelliinvoice.database.InvoiceItemEntity;
 import at.madeha.intelliinvoice.database.InvoiceRepository;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,6 +40,12 @@ public class InvoiceReturnServiceTest {
         testInvoice.setImageUrl("https://www.aiseesoft.com/tutorial/jpg-to-url.html");
         testInvoice.setUpdatedAt(Instant.now());
         testInvoice.setReturnDays(14);
+        InvoiceItemEntity item = new InvoiceItemEntity();
+        item.setDescription("Test Item");
+        item.setQuantity(BigDecimal.valueOf(1));
+        item.setUnitPrice(new BigDecimal("300"));
+
+        testInvoice.setItems(List.of(item));
         processingService.createInvoice(testInvoice);
         String message = returnService.checkReturnDays(testInvoice);
         assertTrue(message.contains("You can return"));
