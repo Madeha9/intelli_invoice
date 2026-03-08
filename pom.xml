@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -31,20 +31,37 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- later on  LangChain4j BOM  when you starting AI integration) -->
-            <!--
             <dependency>
-                <groupId>io.quarkiverse.langchain4j</groupId>
-                <artifactId>quarkus-langchain4j-bom</artifactId>
-                <version>${quarkus-langchain4j.version}</version>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>bom</artifactId>
+                <version>2.26.0</version> <!-- or latest version -->
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            -->
+            <!--  on  LangChain4j BOM  when you starting AI integration) -->
+            <dependency>
+                <groupId>io.quarkiverse.langchain4j</groupId>
+                <artifactId>quarkus-langchain4j-anthropic</artifactId>
+                <version>${quarkus-langchain4j.version}</version>
+            </dependency>
+
+            <!-- Easy RAG (document ingestion, splitting, retrieval) -->
+            <!--            I will need later for analysis, insights, and suggestions as a chatbot inside the system-->
+            <!--            <dependency>-->
+            <!--                <groupId>io.quarkiverse.langchain4j</groupId>-->
+            <!--                <artifactId>quarkus-langchain4j-easy-rag</artifactId>-->
+            <!--                <version>${quarkus-langchain4j.version}</version>-->
+            <!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
+
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+        </dependency>
+
         <!-- REST API (Quarkus REST), for get,set, http, controller , frontend later  -->
         <dependency>
             <groupId>io.quarkus</groupId>
