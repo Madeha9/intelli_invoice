@@ -14,14 +14,11 @@ package at.madeha.intelliinvoice.restapi;
 
 import at.madeha.intelliinvoice.service.StorageService;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.jboss.resteasy.reactive.multipart.FileUpload;
 
+import java.io.InputStream;
 import java.util.Map;
 
 
@@ -35,7 +32,6 @@ public class UploadController {
    CloudStorage class , we do not have to change the controller , because we do not  use
    the class , we are using the interface
     */
-
 
     @Inject
     StorageService storageService;
@@ -51,27 +47,43 @@ public class UploadController {
    /*FileUpload is a class in Quarkus RESt API to handle file upload in the rest API
    contains information related to the file like file name, size, path etc
     */
-    public Response uploadInvoice(FileUpload uploadInvoice) {
+    public Response uploadInvoice(
+            @FormParam("uploadInvoice") InputStream fileInput,
+            @FormParam("fileName") String fileName) {
         try {
-           /*
-           the uploaded Invoice will be saved in the CloudStorage, we receive the file from the upload controller
-           then we pass it to the method upload file in the CouldStorage  in order to  save it  in the could
-           we pass the upload file from the controller to the cloud
-            */
-            String fileUrl = storageService.uploadFile(uploadInvoice);
+            String fileUrl = storageService.uploadFile(fileInput, fileName);
+
             return Response.ok(Map.of(
                     "message", "File uploaded successfully",
                     "url", fileUrl
             )).build();
+
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("File upload failed: " + e.getMessage())
                     .build();
-            //use later on my custom Error
-//            throw new InvoiceValidationException(ErrorCode.FILE_UPLOAD_FAILED);
         }
     }
 }
+//    public Response uploadInvoice(FileUpload uploadInvoice) {
+//        try {
+//           /*
+//           the uploaded Invoice will be saved in the CloudStorage, we receive the file from the upload controller
+//           then we pass it to the method upload file in the CouldStorage  in order to  save it  in the could
+//           we pass the upload file from the controller to the cloud
+//            */
+//            String fileUrl = storageService.uploadFile(uploadInvoice);
+//            return Response.ok(Map.of(
+//                    "message", "File uploaded successfully",
+//                    "url", fileUrl
+//            )).build();
+//        } catch (FileUploadException e) {
+//            return Response.status(Response.Status.BAD_REQUEST)
+//                    .entity(Map.of("error", "UPLOAD_FAILED", "message", e.getMessage()))
+//                    .build();
+//        }
+//    }
+//}
 
 
 
