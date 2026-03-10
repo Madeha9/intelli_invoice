@@ -15,7 +15,8 @@
 
 ## Introduction
 
-Welcome to the train_2025_java_aufbau_example_project! This guide will help you understand how to use the software effectively.
+Welcome to the train_2025_java_aufbau_example_project! This guide will help you understand how to use the software
+effectively.
 
 ### What is this software?
 
@@ -138,9 +139,9 @@ If the application has a web interface:
 #### Setting Up Your Environment
 
 1. **Create Configuration File:**
-   
+
    Create a file named `application.properties` in the same directory as the JAR:
-   
+
    ```properties
    # Application Configuration
    app.name=TrainingProject
@@ -160,7 +161,7 @@ If the application has a web interface:
    ```
 
 2. **Set Environment Variables:**
-   
+
    ```bash
    # Linux/macOS
    export APP_ENV=production
@@ -233,6 +234,7 @@ When you first run the application:
 6. Review import summary
 
 **Supported Formats:**
+
 - CSV (Comma-Separated Values)
 - JSON (JavaScript Object Notation)
 - XML (Extensible Markup Language)
@@ -256,6 +258,7 @@ When you first run the application:
 5. View or download the report
 
 **Available Reports:**
+
 - User Activity Report
 - Data Summary Report
 - System Statistics
@@ -319,6 +322,7 @@ When you first run the application:
 #### Issue 1: Application Won't Start
 
 **Symptoms:**
+
 - Error message when running application
 - Application crashes immediately
 - Nothing happens when starting
@@ -350,6 +354,7 @@ When you first run the application:
 #### Issue 2: Cannot Connect to Database
 
 **Symptoms:**
+
 - "Connection refused" error
 - "Database not found" error
 - Timeout when accessing data
@@ -379,6 +384,7 @@ When you first run the application:
 #### Issue 3: Permission Denied Errors
 
 **Symptoms:**
+
 - "Access denied" messages
 - Cannot perform certain actions
 - 403 Forbidden errors
@@ -400,6 +406,7 @@ When you first run the application:
 #### Issue 4: Slow Performance
 
 **Symptoms:**
+
 - Application responds slowly
 - Timeouts
 - High CPU/memory usage
@@ -426,7 +433,8 @@ When you first run the application:
 
 **Q: What is the purpose of this application?**
 
-A: This is a training project designed to demonstrate Java development best practices, including project structure, documentation, testing, and version control.
+A: This is a training project designed to demonstrate Java development best practices, including project structure,
+documentation, testing, and version control.
 
 **Q: Is this application free to use?**
 
@@ -445,6 +453,7 @@ A: Yes, the application is cross-platform and works on all major operating syste
 **Q: How do I change the default port?**
 
 A: Edit `application.properties` and set:
+
 ```properties
 app.port=9090
 ```
@@ -474,6 +483,7 @@ A: Check the log files in `logs/application.log` for error details.
 **Q: How do I report a bug?**
 
 A: Submit an issue on the project's GitHub repository with:
+
 - Description of the problem
 - Steps to reproduce
 - Expected vs actual behavior
@@ -528,9 +538,9 @@ Want to contribute? See the [Contributing Guide](../CONTRIBUTING.md) for:
 
 | Shortcut | Action |
 |----------|--------|
-| Ctrl+S | Save |
-| Ctrl+F | Search |
-| Ctrl+Q | Quit |
+| Ctrl+S   | Save   |
+| Ctrl+F   | Search |
+| Ctrl+Q   | Quit   |
 
 ### Configuration Options
 

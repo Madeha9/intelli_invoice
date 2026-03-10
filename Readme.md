@@ -2,7 +2,8 @@
 
 ## Overview
 
-This is a Java training project demonstrating software development best practices, including proper project structure, documentation, and development workflows.
+This is a Java training project demonstrating software development best practices, including proper project structure,
+documentation, and development workflows.
 
 ## Quickstart
 
@@ -15,17 +16,20 @@ This is a Java training project demonstrating software development best practice
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/chris-cgsit/train_2025_java_aufbau_example_project.git
 cd train_2025_java_aufbau_example_project
 ```
 
 2. Build the project:
+
 ```bash
 mvn clean install
 ```
 
 3. Run tests:
+
 ```bash
 mvn test
 ```

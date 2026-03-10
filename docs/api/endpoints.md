@@ -16,11 +16,13 @@ This document provides comprehensive documentation for the API endpoints of the 
 ## Base URL
 
 ### Development
+
 ```
 http://localhost:8080/api
 ```
 
 ### Production
+
 ```
 https://api.example.com
 ```
@@ -52,6 +54,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -91,30 +94,30 @@ Content-Type: application/json
 
 ### HTTP Status Codes
 
-| Status Code | Meaning |
-|------------|---------|
-| 200 | OK - Request successful |
-| 201 | Created - Resource created successfully |
-| 204 | No Content - Request successful, no content to return |
-| 400 | Bad Request - Invalid request parameters |
-| 401 | Unauthorized - Authentication required |
-| 403 | Forbidden - Insufficient permissions |
-| 404 | Not Found - Resource not found |
-| 409 | Conflict - Resource conflict (e.g., duplicate) |
-| 422 | Unprocessable Entity - Validation error |
-| 500 | Internal Server Error - Server error |
-| 503 | Service Unavailable - Service temporarily unavailable |
+| Status Code | Meaning                                               |
+|-------------|-------------------------------------------------------|
+| 200         | OK - Request successful                               |
+| 201         | Created - Resource created successfully               |
+| 204         | No Content - Request successful, no content to return |
+| 400         | Bad Request - Invalid request parameters              |
+| 401         | Unauthorized - Authentication required                |
+| 403         | Forbidden - Insufficient permissions                  |
+| 404         | Not Found - Resource not found                        |
+| 409         | Conflict - Resource conflict (e.g., duplicate)        |
+| 422         | Unprocessable Entity - Validation error               |
+| 500         | Internal Server Error - Server error                  |
+| 503         | Service Unavailable - Service temporarily unavailable |
 
 ### Error Codes
 
-| Error Code | Description |
-|-----------|-------------|
-| INVALID_REQUEST | Request validation failed |
+| Error Code         | Description                       |
+|--------------------|-----------------------------------|
+| INVALID_REQUEST    | Request validation failed         |
 | RESOURCE_NOT_FOUND | Requested resource does not exist |
-| DUPLICATE_RESOURCE | Resource already exists |
-| UNAUTHORIZED | Authentication failed |
-| FORBIDDEN | Access denied |
-| INTERNAL_ERROR | Internal server error |
+| DUPLICATE_RESOURCE | Resource already exists           |
+| UNAUTHORIZED       | Authentication failed             |
+| FORBIDDEN          | Access denied                     |
+| INTERNAL_ERROR     | Internal server error             |
 
 ## API Endpoints
 
@@ -127,6 +130,7 @@ GET /api/health
 ```
 
 **Response:**
+
 ```json
 {
   "status": "healthy",
@@ -146,11 +150,13 @@ GET /api/users
 ```
 
 **Query Parameters:**
+
 - `page` (optional, default: 0) - Page number
 - `size` (optional, default: 20) - Page size
 - `sort` (optional) - Sort field and direction (e.g., `name,asc`)
 
 **Response:**
+
 ```json
 {
   "status": "success",
@@ -182,9 +188,11 @@ GET /api/users/{id}
 ```
 
 **Path Parameters:**
+
 - `id` (required) - User ID
 
 **Response:**
+
 ```json
 {
   "status": "success",
@@ -201,6 +209,7 @@ GET /api/users/{id}
 ```
 
 **Error Response (404):**
+
 ```json
 {
   "status": "error",
@@ -219,6 +228,7 @@ Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```json
 {
   "username": "jane_doe",
@@ -230,6 +240,7 @@ Content-Type: application/json
 ```
 
 **Response (201):**
+
 ```json
 {
   "status": "success",
@@ -246,6 +257,7 @@ Content-Type: application/json
 ```
 
 **Validation Errors (422):**
+
 ```json
 {
   "status": "error",
@@ -274,9 +286,11 @@ Content-Type: application/json
 ```
 
 **Path Parameters:**
+
 - `id` (required) - User ID
 
 **Request Body:**
+
 ```json
 {
   "email": "john.doe@example.com",
@@ -286,6 +300,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "status": "success",
@@ -308,9 +323,11 @@ DELETE /api/users/{id}
 ```
 
 **Path Parameters:**
+
 - `id` (required) - User ID
 
 **Response (204):**
+
 ```
 No Content
 ```
@@ -328,10 +345,12 @@ GET /api/resources
 ```
 
 **Query Parameters:**
+
 - `param1` (optional) - Description
 - `param2` (optional) - Description
 
 **Response:**
+
 ```json
 {
   "status": "success",
@@ -436,6 +455,7 @@ fetch('http://localhost:8080/api/users', {
   - `X-RateLimit-Reset`: Timestamp when limit resets
 
 **Rate Limit Exceeded Response (429):**
+
 ```json
 {
   "status": "error",
@@ -456,6 +476,7 @@ List endpoints support pagination using query parameters:
 - `sort` - Sort field and direction (e.g., `name,asc` or `createdAt,desc`)
 
 **Example:**
+
 ```
 GET /api/users?page=2&size=50&sort=createdAt,desc
 ```
@@ -482,6 +503,7 @@ For API support and questions:
 ## Changelog
 
 ### Version 1.0.0 (January 2026)
+
 - Initial API release
 - User management endpoints
 - Authentication support

@@ -17,16 +17,17 @@ Before setting up the project, ensure you have the following installed:
 ### Required Software
 
 - **Java Development Kit (JDK) 11 or higher**
-  - Download from [Oracle](https://www.oracle.com/java/technologies/javase-downloads.html) or [OpenJDK](https://openjdk.java.net/)
-  - Verify installation: `java -version`
+    - Download from [Oracle](https://www.oracle.com/java/technologies/javase-downloads.html)
+      or [OpenJDK](https://openjdk.java.net/)
+    - Verify installation: `java -version`
 
 - **Apache Maven 3.6+**
-  - Download from [Maven website](https://maven.apache.org/download.cgi)
-  - Verify installation: `mvn -version`
+    - Download from [Maven website](https://maven.apache.org/download.cgi)
+    - Verify installation: `mvn -version`
 
 - **Git**
-  - Download from [Git website](https://git-scm.com/downloads)
-  - Verify installation: `git --version`
+    - Download from [Git website](https://git-scm.com/downloads)
+    - Verify installation: `git --version`
 
 ### Optional Software
 
@@ -158,6 +159,7 @@ export DB_PORT=5432
 ```
 
 Or source from file:
+
 ```bash
 source .env
 ```
@@ -283,6 +285,7 @@ mvn compile exec:java  # For regular Java projects
 **Problem:** Dependencies cannot be downloaded
 
 **Solution:**
+
 ```bash
 # Clear Maven cache
 mvn dependency:purge-local-repository
@@ -296,6 +299,7 @@ mvn clean install -U
 **Problem:** Cannot connect to database
 
 **Solution:**
+
 - Verify database is running
 - Check connection credentials in environment variables
 - Ensure firewall allows connections on database port
@@ -306,6 +310,7 @@ mvn clean install -U
 **Problem:** Application port (e.g., 8080) is already in use
 
 **Solution:**
+
 ```bash
 # Find process using port (Linux/macOS)
 lsof -i :8080
@@ -321,6 +326,7 @@ netstat -ano | findstr :8080
 **Problem:** Maven runs out of memory during build
 
 **Solution:**
+
 ```bash
 export MAVEN_OPTS="-Xmx1024m -XX:MaxPermSize=256m"
 mvn clean install

@@ -39,6 +39,7 @@ Use descriptive branch names following this pattern:
 ```
 
 **Types:**
+
 - `feature/` - New features
 - `bugfix/` - Bug fixes
 - `hotfix/` - Critical production fixes
@@ -47,6 +48,7 @@ Use descriptive branch names following this pattern:
 - `test/` - Test additions or modifications
 
 **Examples:**
+
 ```
 feature/user-authentication
 bugfix/login-validation
@@ -114,11 +116,11 @@ Fixes #456
 - **Indentation:** 4 spaces (no tabs)
 - **Line Length:** Maximum 120 characters
 - **Naming Conventions:**
-  - Classes: `PascalCase` (e.g., `UserService`)
-  - Methods: `camelCase` (e.g., `getUserById`)
-  - Constants: `UPPER_SNAKE_CASE` (e.g., `MAX_RETRY_COUNT`)
-  - Variables: `camelCase` (e.g., `userId`)
-  
+    - Classes: `PascalCase` (e.g., `UserService`)
+    - Methods: `camelCase` (e.g., `getUserById`)
+    - Constants: `UPPER_SNAKE_CASE` (e.g., `MAX_RETRY_COUNT`)
+    - Variables: `camelCase` (e.g., `userId`)
+
 ### Code Organization
 
 - One class per file
@@ -170,29 +172,29 @@ public class UserService {
 ## Pull Request Process
 
 1. **Before Creating a PR:**
-   - Ensure all tests pass
-   - Update documentation if needed
-   - Rebase on latest `main` if necessary
-   - Self-review your changes
+    - Ensure all tests pass
+    - Update documentation if needed
+    - Rebase on latest `main` if necessary
+    - Self-review your changes
 
 2. **PR Title:**
-   - Use the same format as commit messages
-   - Be clear and descriptive
+    - Use the same format as commit messages
+    - Be clear and descriptive
 
 3. **PR Description:**
-   - Describe what changes were made
-   - Explain why the changes were necessary
-   - Reference related issues
-   - Include screenshots for UI changes
+    - Describe what changes were made
+    - Explain why the changes were necessary
+    - Reference related issues
+    - Include screenshots for UI changes
 
 4. **Review Process:**
-   - At least one approval required
-   - Address all review comments
-   - Keep discussions focused and constructive
+    - At least one approval required
+    - Address all review comments
+    - Keep discussions focused and constructive
 
 5. **Merging:**
-   - Use "Squash and merge" for feature branches
-   - Delete branch after merging
+    - Use "Squash and merge" for feature branches
+    - Delete branch after merging
 
 ## Testing Requirements
 
@@ -244,6 +246,7 @@ See [docs/setup.md](docs/setup.md) for detailed development environment setup in
 ## Questions?
 
 If you have questions about contributing, please:
+
 - Check existing documentation
 - Review closed PRs and issues
 - Ask in project discussions
