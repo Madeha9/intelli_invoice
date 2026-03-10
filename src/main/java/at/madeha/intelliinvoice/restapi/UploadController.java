@@ -12,6 +12,7 @@ package at.madeha.intelliinvoice.restapi;
  *  that calls (dependency injection ) in quarkus
  */
 
+import at.madeha.intelliinvoice.service.InvoiceProcessingService;
 import at.madeha.intelliinvoice.service.StorageService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -32,7 +33,7 @@ public class UploadController {
    CloudStorage class , we do not have to change the controller , because we do not  use
    the class , we are using the interface
     */
-
+   InvoiceProcessingService invoiceProcessingService; // The service that saves to DB
     @Inject
     StorageService storageService;
 

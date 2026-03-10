@@ -3,6 +3,7 @@ package at.madeha.intelliinvoice.service;
 import at.madeha.intelliinvoice.database.InvoiceEntity;
 import at.madeha.intelliinvoice.database.InvoiceItemEntity;
 import at.madeha.intelliinvoice.database.InvoiceRepository;
+import at.madeha.intelliinvoice.infrastructure.CloudStorageService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.jboss.logging.Logger;
@@ -27,6 +28,8 @@ public class InvoiceProcessingService {
     private InvoiceReturnService returnService;
     @Inject
     private InvoiceRepository repository;
+    @Inject
+    private CloudStorageService cloudStorageService;
 
     // Upload an invoice image then  create invoice entity in the database
     public InvoiceEntity createInvoice(InvoiceEntity invoice) {
@@ -35,6 +38,7 @@ public class InvoiceProcessingService {
         Instant now = Instant.now();
         invoice.setCreatedAt(now);
         invoice.setUpdatedAt(now);
+//        invoice.setImageUrl(cloudStorageService.uploadFile());
         //linking the child items to the parent invoice
         for (InvoiceItemEntity item : invoice.getItems()) {
             item.setInvoice(invoice);

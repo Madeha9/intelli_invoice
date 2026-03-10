@@ -9,16 +9,14 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.version>3.32.1</quarkus.platform.version>
-
-        <!--  plan to use LangChain4j later -->
-        <!-- <quarkus-langchain4j.version>0.21.0</quarkus-langchain4j.version> -->
-        <!-- Testing to run test automatically:optional-->
+        <quarkus-langchain4j.version>1.7.4
+        </quarkus-langchain4j.version>        <!-- Testing to run test automatically:optional-->
         <surefire.version>3.5.2</surefire.version>
     </properties>
     <dependencyManagement>
@@ -32,40 +30,45 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>io.quarkiverse.langchain4j</groupId>
+                <artifactId>quarkus-langchain4j-bom</artifactId>
+                <version>${quarkus-langchain4j.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
                 <version>2.26.0</version> <!-- or latest version -->
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!--  on  LangChain4j BOM  when you starting AI integration) -->
-            <dependency>
-                <groupId>io.quarkiverse.langchain4j</groupId>
-                <artifactId>quarkus-langchain4j-anthropic</artifactId>
-                <version>${quarkus-langchain4j.version}</version>
-            </dependency>
-
-            <!-- Easy RAG (document ingestion, splitting, retrieval) -->
-            <!--            I will need later for analysis, insights, and suggestions as a chatbot inside the system-->
-            <!--            <dependency>-->
-            <!--                <groupId>io.quarkiverse.langchain4j</groupId>-->
-            <!--                <artifactId>quarkus-langchain4j-easy-rag</artifactId>-->
-            <!--                <version>${quarkus-langchain4j.version}</version>-->
-            <!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-
+        <!--        <dependency>-->
+        <!--            <groupId>io.quarkiverse.langchain4j</groupId>-->
+        <!--            <artifactId>quarkus-langchain4j-anthropic</artifactId>-->
+        <!--            <version>${quarkus-langchain4j.version}</version>-->
+        <!--        </dependency>-->
+        <!--        &lt;!&ndash; Quarkus LangChain4j Anthropic &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>dev.langchain4j</groupId>-->
+        <!--            <artifactId>langchain4j-core</artifactId>-->
+        <!--            <version>${quarkus-langchain4j.version}</version>-->
+        <!--        </dependency>-->
+        <dependency>
+            <groupId>io.quarkiverse.langchain4j</groupId>
+            <artifactId>quarkus-langchain4j-anthropic</artifactId>
+        </dependency>
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>s3</artifactId>
         </dependency>
-
-        <!-- REST API (Quarkus REST), for get,set, http, controller , frontend later  -->
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-rest</artifactId>
+            <artifactId>quarkus-rest-client-jackson</artifactId>
         </dependency>
         <!-- JSON serialization (Jackson) java objects to JSON to use get , set  -->
         <dependency>
@@ -101,14 +104,6 @@
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--  Lombok to generate the getter and setter, hashcode, constructors, after compiler   -->
-        <!--
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        -->
     </dependencies>
     <build>
         <plugins>

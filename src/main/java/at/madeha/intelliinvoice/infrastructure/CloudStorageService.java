@@ -57,8 +57,8 @@ public class CloudStorageService implements StorageService {
 
             // Upload to S3 directly from InputStream
             s3Client.putObject(request, RequestBody.fromInputStream(fileInput, fileInput.available()));
-
-            return "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + key;
+            String urlImage = "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + key;
+            return urlImage;
 
         } catch (IOException e) {
             throw new FileUploadException("Failed to read uploaded file", e);
