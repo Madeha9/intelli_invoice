@@ -10,8 +10,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static io.smallrye.common.constraint.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 class InvoiceRepositoryTest {
@@ -27,7 +27,7 @@ class InvoiceRepositoryTest {
 //    @BeforeEach
 //    @Transactional
 //    public void cleanDatabase() {
-//     invoiceRepo.deleteAll();
+//        invoiceRepo.deleteAll();
 //
 //    }
     @Test
@@ -48,6 +48,21 @@ class InvoiceRepositoryTest {
     }
 
     @Test
+    void saveWithItems() {
+        // Using the static method to build the object (Includes 1 item inside), from the Utilities Class
+        InvoiceEntity invoice = InvoiceTestUtils.createInvoice("Test Store", "100.00");
+        //Save it using the repository
+        InvoiceEntity saved = invoiceRepo.save(invoice);
+        //Assertions
+        assertNotNull(saved.getId(), "Invoice ID should not be null");
+        // Verify the items list isn't empty
+        assertTrue(saved.getItems().size() > 0);// Verify the first item in the list was actually saved with its own ID
+        assertNotNull(saved.getItems().get(0).getId(), "Item ID should not be null");
+        // Verify the size is correct
+        assertTrue(saved.getItems().size() > 0);
+    }
+
+    @Test
     void findById() {
         InvoiceEntity invoiceEntity = new InvoiceEntity();
         invoiceEntity.setInvoiceDate(LocalDate.now());
@@ -62,36 +77,35 @@ class InvoiceRepositoryTest {
         assertTrue(invoiceRepo.findById(id).isPresent());
 
     }
-
     @Test
     void findAll() {
+        // Use the Utility class to build the objects
+        InvoiceEntity inv1 = InvoiceTestUtils.createInvoice("Store A", "10.00");
+        InvoiceEntity inv2 = InvoiceTestUtils.createInvoice("Store B", "20.00");
 
-        // create first invoice
-        InvoiceEntity invoice1 = new InvoiceEntity();
-        invoice1.setStoreName("Store1");
-        invoice1.setInvoiceDate(LocalDate.now());
-        invoice1.setTotalAmount(new BigDecimal("13.00"));
-        invoice1.setCurrency("USD");
-        invoice1.setCreatedAt(Instant.now());
-        invoice1.setUpdatedAt(Instant.now());
-        invoiceRepo.save(invoice1);
+        // Save them using the injected repo
+        invoiceRepo.save(inv1);
+        invoiceRepo.save(inv2);
 
-        // create second invoice
-        InvoiceEntity invoice2 = new InvoiceEntity();
-        invoice2.setStoreName("Store2");
-        invoice2.setInvoiceDate(LocalDate.now());
-        invoice2.setTotalAmount(new BigDecimal("20.00"));
-        invoice2.setCurrency("EUR");
-        invoice2.setCreatedAt(Instant.now());
-        invoice2.setUpdatedAt(Instant.now());
-        invoiceRepo.save(invoice2);
-        invoice1.setReturnDays(14);
-
-
-        // test
         List<InvoiceEntity> invoices = invoiceRepo.findAll();
-        //the database should have at leat two line that has beingn ases
-        assertTrue(invoices.size() >= 2, "The database should contain exactly 2 invoices");
+
+        // With @BeforeEach cleaning the DB, this will be exactly 2
+        assertTrue(invoices.size() >= 2);
+        assertFalse(invoices.get(0).getItems().isEmpty());
+    }
+
+    @Test
+    void findByStoreName() {
+        String target = "SpecificStore";
+        invoiceRepo.save(InvoiceTestUtils.createInvoice(target, "50.00"));
+        invoiceRepo.save(InvoiceTestUtils.createInvoice("Other", "10.00"));
+
+        List<InvoiceEntity> results = invoiceRepo.findAll().stream()
+                .filter(i -> target.equals(i.getStoreName()))
+                .toList();
+
+        assertTrue(results.size() >= 1);
+        assertEquals(target, results.get(0).getStoreName());
     }
 
 
@@ -111,3 +125,6 @@ class InvoiceRepositoryTest {
         assertTrue(invoiceRepo.findById(id).isEmpty());
     }
 }
+
+
+//Creat İnvoice without Method to check the error cases , we do it late

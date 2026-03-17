@@ -6,7 +6,9 @@ import dev.langchain4j.service.UserMessage;
 import dev.langchain4j.service.V;
 import io.quarkiverse.langchain4j.ImageUrl;
 import io.quarkiverse.langchain4j.RegisterAiService;
-// ... other imports
+/*
+this Class is to call the LLM Claude Sonnet  to extract the invoice data
+ */
 
 @RegisterAiService
 public interface InvoiceExtractor {
