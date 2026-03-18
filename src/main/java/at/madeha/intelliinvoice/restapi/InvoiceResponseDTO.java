@@ -10,6 +10,8 @@ public class InvoiceResponseDTO {
     public java.math.BigDecimal totalAmount;
     public String status;
     public long daysLeft;
+    public java.math.BigDecimal vatAmount;
+    public Integer invoiceNumber;
 
     // Constructor that takes the Entity and the Status Record
     public InvoiceResponseDTO(at.madeha.intelliinvoice.database.InvoiceEntity entity,
@@ -20,5 +22,7 @@ public class InvoiceResponseDTO {
         this.totalAmount = entity.getTotalAmount();
         this.status = info.status().name();
         this.daysLeft = info.daysLeft();
+        this.invoiceNumber = entity.getInvoiceNumber();
+        this.vatAmount = entity.getVatAmount();
     }
 }
