@@ -11,23 +11,7 @@ package at.madeha.intelliinvoice.restapi;
 // * the framework creates once and could be used many times ,which makes the code cleaner
 // *  that calls (dependency injection ) in quarkus
 // */
-//
-//import at.madeha.intelliinvoice.database.InvoiceEntity;
-//import at.madeha.intelliinvoice.service.InvoiceProcessingService;
-//import jakarta.inject.Inject;
-//import jakarta.ws.rs.*;
-//import jakarta.ws.rs.core.MediaType;
-//import jakarta.ws.rs.core.Response;
-//
-//import java.io.InputStream;
-//import java.util.Map;
-//
-//
-//@Path("/UploadInvoice")
-///*
-// * the path is where the controller will respond for the request https.......Upload controller
-// * pth is the URL for the API  endpoint
-// */
+
 //public class UploadController {
 //   /*we use the interface instead of the class to avoid the full dependency on the class , if we change the
 //   CloudStorage class , we do not have to change the controller , because we do not  use
@@ -47,25 +31,10 @@ package at.madeha.intelliinvoice.restapi;
 //   /*FileUpload is a class in Quarkus RESt API to handle file upload in the rest API
 //   contains information related to the file like file name, size, path etc
 //    */
-//    public Response uploadInvoice(
-//            @FormParam("uploadInvoice") InputStream fileInput,
-//            @FormParam("fileName") String fileName) {
-//        try {
-//            InvoiceEntity fileUrl = invoiceProcessingService.processUploadedInvoice(fileInput, fileName);
-//            return Response.ok(Map.of(
-//                    "message", "File uploaded successfully",
-//                    "url", fileUrl
-//            )).build();
-//
-//        } catch (Exception e) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-//                    .entity("File upload failed: " + e.getMessage())
-//                    .build();
-//        }
-//    }
-//}
+
 
 import at.madeha.intelliinvoice.database.InvoiceEntity;
+import at.madeha.intelliinvoice.exception.InvoiceValidationException;
 import at.madeha.intelliinvoice.service.InvoiceProcessingService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -108,12 +77,21 @@ public class UploadController {
                     "status", "COMPLETED",
                     "data", savedInvoice // This will include the ID, URL, and AI data
             )).build();
+        } catch (InvoiceValidationException e) {
+            // This catches the  custom errors (Invalid format, AI math errors, etc.)
+            return Response.status(400).entity(Map.of(
+                    "errorType", e.getErrorCode(),
+                    "details", e.getMessage()
+            )).build();
         } catch (Exception e) {
+            // This is for  safety net for unexpected crashes
             return Response.status(500).entity(Map.of(
-                    "message", "File upload failed",
-                    "error", e.getMessage()
+                    "errorType", "UNKNOWN_ERROR",
+                    "details", "Something went wrong on the server."
             )).build();
         }
+
     }
+
 }
 
