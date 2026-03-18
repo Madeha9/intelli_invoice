@@ -6,18 +6,22 @@ import at.madeha.intelliinvoice.business.InvoiceStatus;
 import at.madeha.intelliinvoice.database.InvoiceEntity;
 import at.madeha.intelliinvoice.database.InvoiceItemEntity;
 import at.madeha.intelliinvoice.database.InvoiceRepository;
+import at.madeha.intelliinvoice.exception.ErrorCode;
+import at.madeha.intelliinvoice.exception.InvoiceValidationException;
 import at.madeha.intelliinvoice.infrastructure.InvoiceExtractor;
 import at.madeha.intelliinvoice.service.helper.InvoiceUploadService;
 import at.madeha.intelliinvoice.service.helper.ReturnStatusInfo;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import org.jboss.logging.Logger;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 //    private InvoiceValidationService validationService; //to validate the info
@@ -31,21 +35,12 @@ import java.util.UUID;
  * we set the url of the image here
  * the url comes from the s3
  *      */
-
-//    // List all invoices with return info, if there is return policy or not
-//    public void listInvoicesWithReturnInfo() {
-//        List<InvoiceEntity> invoices = repository.findAll();
 // /*
 // we use compareTo interface with BigDecima we can not use BigDecimal with > or < ,
 // * CompareTo return 0,1,-1 , we compare it with 0 (this > 0),that means the difference is positive
 // we set the value to 200 , using  BigDecimal.valueOf(200)) > 0, if the total amount is greater than 200 then
 //  */
-//        for (InvoiceEntity invoice : invoices) {
-//            if (invoice.getTotalAmount().compareTo(BigDecimal.valueOf(200)) > 0) {
-//                LOG.info("Invoice " + invoice.getId() + "You might get a bonus or discount with your store card!");
-//            }
-//            String returnMessage = returnService.checkReturnDays(invoice);
-//            LOG.info("Invoice " + invoice.getId() + ": " + returnMessage);
+
 
 
 @ApplicationScoped
@@ -60,7 +55,7 @@ public class InvoiceProcessingService {
     InvoiceExtractor extractor;
     // LangChain4j AI interface
     @Inject
-    InvoiceValidationService validationService;
+    InvoiceValidationService invoiceValidationService;
 
     @Inject
     InvoiceRepository repository;     // JPA Repository
@@ -68,19 +63,21 @@ public class InvoiceProcessingService {
     @Transactional
     public InvoiceEntity processUploadedInvoice(InputStream fileInput, String fileName, String contentType) {
         String imageUrl;
-
-        //  UPLOAD ---
+        //first the  VALIDATE FILE
+        // We do this first! If it's a "bad" file, we stop here and throw the exception.
+        invoiceValidationService.validateFile(fileInput, fileName, contentType);
+        //  then  UPLOAD  the file to the cloud after validate it
         try {
             imageUrl = uploadHelper.processUploadedInvoice(fileInput, fileName, contentType);
             LOG.info("Step 1 Success: Uploaded to " + imageUrl);
             //We need to convert the url to avoid the error before sending it to the model
-            imageUrl = java.net.URI.create(imageUrl).toASCIIString();
+            imageUrl = java.net.URI.create(imageUrl).toASCIIString();//we use it to deal with the spaces in the image name etc..
         } catch (Exception e) {
             LOG.error("Step 1 FAILED (Upload): " + e.getMessage());
-            throw new RuntimeException("Cloud Storage Error: Could not upload file.", e);
+            throw new InvoiceValidationException(ErrorCode.FILE_UPLOAD_FAILED, "Cloud Storage Error: Could not upload file.", e);
         }
 
-        // --- STEP 2: AI EXTRACTION ---
+        // STEP 2: AI EXTRACTION  to extract the info from the Invoice
         Invoice extractedData;
         try {
             extractedData = extractor.extract(imageUrl);
@@ -91,11 +88,27 @@ public class InvoiceProcessingService {
             LOG.error("Raw AI Error: " + e.getMessage());
 
             // Use a descriptive error so your Controller can tell the user
-            throw new RuntimeException("AI Extraction Error: The AI could not read the invoice or returned an invalid format.", e);
+            throw new InvoiceValidationException(ErrorCode.INVALID_INVOICE_DATA, "AI Extraction Error: The AI could not read the invoice or returned an invalid format.", e);
         }
 
-        //  MAPPING & DB ---
+        //  MAPPING  the object to the DB ---
+        InvoiceEntity entity = mapToEntity(extractedData, imageUrl);
+        // --- STEP 4: VALIDATE AI DATA ---
+        // Now we check if the AI found a store name, a positive total, etc.
+        invoiceValidationService.validate(entity);
+        // --- STEP 5: SAVE TO DATABASE ---
         try {
+            repository.save(entity);
+            LOG.info(" Success: Saved ID " + entity.getId());
+            return entity;
+        } catch (Exception e) {
+            LOG.error(" FAILED (Database): " + e.getMessage());
+        }
+        throw new InvoiceValidationException(ErrorCode.DATABASE_ERROR, "Failed to save to database.");
+    }
+
+    // a helper Method
+    private InvoiceEntity mapToEntity(Invoice extractedData, String imageUrl) {
             InvoiceEntity entity = new InvoiceEntity();
             /*the Invoice enum ....
             to set the Invoice Status  and the day left to retun the Invoice
@@ -105,6 +118,8 @@ public class InvoiceProcessingService {
             entity.setTotalAmount(extractedData.getTotalAmount());
             entity.setInvoiceDate(extractedData.getInvoiceDate());
             entity.setCurrency(extractedData.getCurrency());
+        entity.setVatAmount(extractedData.getVatAmount());
+        entity.setInvoiceNumber(extractedData.getInvoiceNumber());
             ReturnStatusInfo returnStatusInfo = invoiceReturnService.getReturnStatusUpdate(entity);
             InvoiceStatus status = returnStatusInfo.status(); //se the Status from the enum and the record after getting the data from the AI so that we
             //we can use the Invoice date and it is nt null anymore
@@ -124,15 +139,7 @@ public class InvoiceProcessingService {
                     entity.getItems().add(itemEntity);
                 }
             }
-
-            repository.save(entity);
-            LOG.info(" Success: Saved ID " + entity.getId());
             return entity;
-
-        } catch (Exception e) {
-            LOG.error(" FAILED (Database): " + e.getMessage());
-            throw new RuntimeException("Database Error: Could not save extracted data.", e);
-        }
     }
 
     //TO Search the invoice using the store name
@@ -163,9 +170,7 @@ public class InvoiceProcessingService {
     // --- READ (Find by ID) ---
     public InvoiceEntity getInvoiceById(UUID id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Invoice with ID " + id + " not found."));
-//                            ErrorCode.INVOICE_NOT_FOUND;
-
+                .orElseThrow(() -> new InvoiceValidationException(ErrorCode.INVOICE_NOT_FOUND, "Invoice with ID " + id + " not found."));
     }
     /*
     @findAll is a method to view all the saved invoices
@@ -178,13 +183,27 @@ public class InvoiceProcessingService {
 
     // --- UPDATE (Manual Update) ---
     @Transactional
-    public InvoiceEntity updateInvoice(InvoiceEntity invoice) {
-//        validationService.validate(invoice);
-        invoice.setUpdatedAt(Instant.now());
-        return repository.save(invoice);
+    public Optional<InvoiceEntity> updateInvoice(InvoiceEntity invoice) {
+        Optional<InvoiceEntity> existing = repository.findById(invoice.getId());
+        if (existing == null) {
+            throw new NotFoundException("Invoice not found with ID: " + invoice.getId());
+        }
+//        //  Map only the fields you want to allow the user to change
+//        existing.setStoreName(invoice.getStoreName());
+//        existing.setTotalAmount(invoice.getTotalAmount());
+//        existing.setVatAmount(invoice.getVatAmount());
+//        existing.setCurrency(invoice.getCurrency());
+//        existing.setInvoiceDate(invoice.getInvoiceDate());
+//        // ... add any other fields you want to update
+//
+//        // 3. Update the "Modified" timestamp
+//        // 4. In Quarkus/Hibernate, you don't even need to call 'save'!
+//        // Because of @Transactional, any changes to 'existing' are saved automatically.
+        return existing;
+//        existing.setUpdatedAt(Instant.now());
     }
 
-    // --- DELETE Invoice by ID  ---
+    // DELETE Invoice by ID
     /*
     we use the Transactional to ensure that if something went wrong nothing will be saved in the database
      */
@@ -194,7 +213,7 @@ public class InvoiceProcessingService {
         try {
             repository.deleteById(id);
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Delete failed: Invoice not found.");
+            throw new InvoiceValidationException(ErrorCode.INVOICE_NOT_FOUND, "Delete failed: Invoice not found.");
         }
     }
 }
