@@ -1,4 +1,4 @@
-# IntelliInvoice
+# IntelliInvoice (AI-Enhanced Billing System)
 
 > A modern, full-stack billing and invoice management system.
 
