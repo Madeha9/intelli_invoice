@@ -1,0 +1,30 @@
+@startuml UC-13
+
+skinparam actorStyle awesome
+skinparam backgroundColor #fdf5f8
+skinparam usecase {
+    BackgroundColor #fce4ec
+    BorderColor #880e4f
+    FontColor #880e4f
+}
+skinparam actor {
+    BackgroundColor #880e4f
+    FontColor #880e4f
+}
+skinparam arrow {
+    Color #880e4f
+}
+
+title UC-13 — View Invoice Metrics Summary
+
+actor "User" as User
+
+rectangle "IntelliInvoice System" {
+    usecase "UC-03\nView Invoice List"        as UC03
+    usecase "UC-13\nView Metrics Summary"     as UC13
+}
+
+User --> UC03
+UC03 ..> UC13 : <<include>>
+
+@enduml

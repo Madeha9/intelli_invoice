@@ -1,0 +1,44 @@
+@startuml UC-15
+
+' --- Global Styles ---
+skinparam actorStyle awesome
+skinparam backgroundColor #fdf5f8
+
+' --- Use Case Style ---
+skinparam usecase {
+    BackgroundColor #fce4ec
+    BorderColor #880e4f
+    FontColor #880e4f
+    ArrowColor #880e4f
+}
+
+' --- Actor Style ---
+skinparam actor {
+    BackgroundColor #880e4f
+    BorderColor #880e4f
+    FontColor #880e4f
+}
+
+' --- Arrow Style ---
+skinparam arrow {
+    Color #880e4f
+    FontColor #880e4f
+}
+
+title UC-15 — View Quarterly Spending Breakdown
+
+' --- Actors ---
+' The "User" will now have the person icon automatically due to actorStyle awesome
+actor "User" as User #880e4f
+
+' --- System Boundary ---
+rectangle "IntelliInvoice System" #white {
+    usecase "UC-08\nView Spending Analytics" as UC08
+    usecase "UC-15\nView Quarterly Breakdown" as UC15
+}
+
+' --- Relationships ---
+User --> UC08
+UC08 ..> UC15 : <<include>>
+
+@enduml

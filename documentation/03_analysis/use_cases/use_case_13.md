@@ -10,6 +10,10 @@
 statistics at the top of the Invoice List page through
 four metric cards.
 
+## Use Case Diagram
+
+![use_case_13.png](../Diagrams%26Images/use_case_diagrams/use_case_png/use_case_13.png)
+
 ## Preconditions
 
 - User is on the Invoice List page

@@ -9,6 +9,10 @@
 **Brief Description:** The user navigates between the main pages
 of the application using the sidebar navigation.
 
+## Use Case Diagram
+
+![use_case_11.png](../Diagrams%26Images/use_case_diagrams/use_case_png/use_case_11.png)
+
 ## Preconditions
 
 - Angular application is running

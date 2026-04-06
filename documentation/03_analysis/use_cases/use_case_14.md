@@ -9,6 +9,10 @@
 **Brief Description:** The user views the top 5 stores ranked
 by total spending in the Analytics page.
 
+## Use Case Diagram
+
+![use_case_diagram_14.png](../Diagrams%26Images/use_case_diagrams/use_case_png/use_case_diagram_14.png)
+
 ## Preconditions
 
 - At least one invoice exists in the database

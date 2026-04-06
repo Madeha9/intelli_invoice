@@ -1,13 +1,10 @@
 @startuml Use_Case_Overview_Complete
-
-' --- High-Contrast Professional Palette ---
 skinparam backgroundColor #fdf5f8
 skinparam actorStyle awesome
 skinparam RoundCorner 10
 skinparam Shadowing true
 skinparam defaultFontColor #000000
 
-' Main User Actor (Vibrant Pink/Magenta)
 skinparam actor {
     BackgroundColor #FF4081
     BorderColor #C2185B
@@ -21,7 +18,6 @@ skinparam actor<<System>> {
     FontColor #01579B
 }
 
-' Usecases (White background inside Pink borders for maximum text clarity)
 skinparam usecase {
     BackgroundColor #FFFFFF
     BorderColor #C2185B
@@ -29,7 +25,6 @@ skinparam usecase {
     FontSize 13
 }
 
-' Boundaries and Arrows
 skinparam rectangle {
     BackgroundColor #FFFFFF
     BorderColor #455A64

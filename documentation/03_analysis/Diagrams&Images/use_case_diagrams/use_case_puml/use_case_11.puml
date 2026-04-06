@@ -1,0 +1,34 @@
+@startuml UC-11
+
+skinparam actorStyle awesome
+skinparam backgroundColor #fdf5f8
+skinparam usecase {
+    BackgroundColor #fce4ec
+    BorderColor #880e4f
+    FontColor #880e4f
+}
+skinparam actor {
+    BackgroundColor #880e4f
+    FontColor #880e4f
+}
+skinparam arrow {
+    Color #880e4f
+}
+
+title UC-11 — Navigate Between Pages
+
+actor "User" as User
+
+rectangle "IntelliInvoice System" {
+    usecase "UC-11\nNavigate Between Pages" as UC11
+    usecase "Invoice List"                  as P1
+    usecase "Upload"                        as P2
+    usecase "Analytics"                     as P3
+}
+
+User  --> UC11
+UC11 ..> P1 : <<extend>>
+UC11 ..> P2 : <<extend>>
+UC11 ..> P3 : <<extend>>
+
+@enduml

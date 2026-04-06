@@ -5,8 +5,6 @@ skinparam DefaultFontName Arial
 
 title Activity Diagram 2 — View and Manage Invoices
 
-' --- Swimlane Definitions with Colors and Icons ---
-
 |#E3F2FD|<&person> User|
 start
 :Navigate to\nInvoice List page;

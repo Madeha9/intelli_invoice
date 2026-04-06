@@ -9,6 +9,10 @@
 **Brief Description:** The user views their spending broken down
 by quarter (Q1–Q4) in a donut chart on the Analytics page.
 
+## Use Case Diagram
+
+![use_case_diagram_15.png](../Diagrams%26Images/use_case_diagrams/use_case_png/use_case_diagram_15.png)
+
 ## Preconditions
 
 - At least one invoice exists for the selected year
